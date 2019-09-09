@@ -18,6 +18,8 @@ var (
 	procSQLDisconnect      = mododbc32.NewProc("SQLDisconnect")
 	procSQLSetConnectAttr  = mododbc32.NewProc("SQLSetConnectAttr")
 	procSQLSetEnvAttr      = mododbc32.NewProc("SQLSetEnvAttr")
+	procSQLFreeHandle      = mododbc32.NewProc("SQLFreeHandle")
+	
 )
 
 func GetDllName() string {
@@ -56,6 +58,12 @@ func SQLSetConnectAttr(connectionHandle SQLHDBC, attribute SQLINTEGER, valuePtr 
 
 func SQLSetEnvAttr(environmentHandle SQLHENV, attribute SQLINTEGER, valuePtr SQLPOINTER, stringLength SQLINTEGER) (ret SQLRETURN) {
 	r0, _, _ := syscall.Syscall6(procSQLSetEnvAttr.Addr(), 4, uintptr(environmentHandle), uintptr(attribute), uintptr(valuePtr), uintptr(stringLength), 0, 0)
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLFreeHandle(handleType SQLSMALLINT, handle SQLHANDLE) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall(procSQLFreeHandle.Addr(), 2, uintptr(handleType), uintptr(handle), 0)
 	ret = SQLRETURN(r0)
 	return
 }

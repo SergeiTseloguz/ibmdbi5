@@ -4,7 +4,7 @@
 
 // Package odbc implements database/sql driver to access data via odbc interface.
 //
-package go_ibm_db
+package ibmdbi5
 
 import (
 	"database/sql"

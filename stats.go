@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package go_ibm_db
+package ibmdbi5
 
 import (
 	"github.com/SergeiTseloguz/ibmdbi5/api"
