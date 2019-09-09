@@ -16,6 +16,7 @@ var (
 	procSQLAllocHandle     = mododbc32.NewProc("SQLAllocHandle")
 	procSQLDriverConnect   = mododbc32.NewProc("SQLDriverConnect")
 	procSQLDisconnect      = mododbc32.NewProc("SQLDisconnect")
+	procSQLSetConnectAttr = mododbc32.NewProc("SQLSetConnectAttr")
 	
 )
 
@@ -43,6 +44,12 @@ func SQLDisconnect(connectionHandle SQLHDBC) (ret SQLRETURN) {
 
 func SQLDriverConnect(connectionHandle SQLHDBC, windowHandle SQLHWND, inConnectionString *SQLWCHAR, stringLength1 SQLSMALLINT, outConnectionString *SQLWCHAR, bufferLength SQLSMALLINT, stringLength2Ptr *SQLSMALLINT, driverCompletion SQLUSMALLINT) (ret SQLRETURN) {
 	r0, _, _ := syscall.Syscall9(procSQLDriverConnect.Addr(), 8, uintptr(connectionHandle), uintptr(windowHandle), uintptr(unsafe.Pointer(inConnectionString)), uintptr(stringLength1), uintptr(unsafe.Pointer(outConnectionString)), uintptr(bufferLength), uintptr(unsafe.Pointer(stringLength2Ptr)), uintptr(driverCompletion), 0)
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLSetConnectAttr(connectionHandle SQLHDBC, attribute SQLINTEGER, valuePtr SQLPOINTER, stringLength SQLINTEGER) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall6(procSQLSetConnectAttrW.Addr(), 4, uintptr(connectionHandle), uintptr(attribute), uintptr(valuePtr), uintptr(stringLength), 0, 0)
 	ret = SQLRETURN(r0)
 	return
 }
