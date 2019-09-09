@@ -8,7 +8,7 @@ import (
 	"database/sql/driver"
 	"unsafe"
 
-	"github.com/mSergeiTseloguz/ibmdbi5"
+	"github.com/SergeiTseloguz/ibmdbi5"
 )
 
 type Conn struct {
