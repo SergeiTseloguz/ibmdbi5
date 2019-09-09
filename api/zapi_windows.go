@@ -16,8 +16,8 @@ var (
 	procSQLAllocHandle     = mododbc32.NewProc("SQLAllocHandle")
 	procSQLDriverConnect   = mododbc32.NewProc("SQLDriverConnect")
 	procSQLDisconnect      = mododbc32.NewProc("SQLDisconnect")
-	procSQLSetConnectAttr = mododbc32.NewProc("SQLSetConnectAttr")
-	
+	procSQLSetConnectAttr  = mododbc32.NewProc("SQLSetConnectAttr")
+	procSQLSetEnvAttr      = mododbc32.NewProc("SQLSetEnvAttr")
 )
 
 func GetDllName() string {
@@ -49,8 +49,13 @@ func SQLDriverConnect(connectionHandle SQLHDBC, windowHandle SQLHWND, inConnecti
 }
 
 func SQLSetConnectAttr(connectionHandle SQLHDBC, attribute SQLINTEGER, valuePtr SQLPOINTER, stringLength SQLINTEGER) (ret SQLRETURN) {
-	r0, _, _ := syscall.Syscall6(procSQLSetConnectAttrW.Addr(), 4, uintptr(connectionHandle), uintptr(attribute), uintptr(valuePtr), uintptr(stringLength), 0, 0)
+	r0, _, _ := syscall.Syscall6(procSQLSetConnectAttr.Addr(), 4, uintptr(connectionHandle), uintptr(attribute), uintptr(valuePtr), uintptr(stringLength), 0, 0)
 	ret = SQLRETURN(r0)
 	return
 }
 
+func SQLSetEnvAttr(environmentHandle SQLHENV, attribute SQLINTEGER, valuePtr SQLPOINTER, stringLength SQLINTEGER) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall6(procSQLSetEnvAttr.Addr(), 4, uintptr(environmentHandle), uintptr(attribute), uintptr(valuePtr), uintptr(stringLength), 0, 0)
+	ret = SQLRETURN(r0)
+	return
+}

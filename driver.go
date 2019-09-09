@@ -9,7 +9,7 @@ package go_ibm_db
 import (
 	"database/sql"
 
-	"github.com/ibmdb/go_ibm_db/api"
+	"github.com/SergeiTseloguz/ibmdbi5/api"
 )
 
 var drv Driver
