@@ -19,11 +19,6 @@ type Driver struct {
 	h api.SQLHENV // environment handle
 }
 
-// implements sql.Driver interface
-func (d *Driver) Open(name string) (driver.Conn, error) {
-    fmt.Printf("[i5/os driver]: open(%s)", name)
-    return nil, nil
-}
 
 func initDriver() error {
 
