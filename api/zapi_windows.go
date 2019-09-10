@@ -21,6 +21,14 @@ var (
 	procSQLFreeHandle      = mododbc32.NewProc("SQLFreeHandle")
 	procSQLGetDiagRec      = mododbc32.NewProc("SQLGetDiagRec")
 	procSQLEndTran         = mododbc32.NewProc("SQLEndTran")
+	procSQLGetData         = mododbc32.NewProc("SQLGetData")
+	procSQLBindCol         = mododbc32.NewProc("SQLBindCol")
+	procSQLBindParameter   = mododbc32.NewProc("SQLBindParameter")
+	procSQLDescribeCol     = mododbc32.NewProc("SQLDescribeCol")
+	procSQLPrepare         = mododbc32.NewProc("SQLPrepare")
+	procSQLCloseCursor     = mododbc32.NewProc("SQLCloseCursor")
+	procSQLExecute         = mododbc32.NewProc("SQLExecute")
+	procSQLNumResultCols   = mododbc32.NewProc("SQLNumResultCols")
 	
 )
 
@@ -78,6 +86,54 @@ func SQLGetDiagRec(handleType SQLSMALLINT, handle SQLHANDLE, recNumber SQLSMALLI
 
 func SQLEndTran(handleType SQLSMALLINT, handle SQLHANDLE, completionType SQLSMALLINT) (ret SQLRETURN) {
 	r0, _, _ := syscall.Syscall(procSQLEndTran.Addr(), 3, uintptr(handleType), uintptr(handle), uintptr(completionType))
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLGetData(statementHandle SQLHSTMT, colOrParamNum SQLUSMALLINT, targetType SQLSMALLINT, targetValuePtr SQLPOINTER, bufferLength SQLLEN, vallen *SQLLEN) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall6(procSQLGetData.Addr(), 6, uintptr(statementHandle), uintptr(colOrParamNum), uintptr(targetType), uintptr(targetValuePtr), uintptr(bufferLength), uintptr(unsafe.Pointer(vallen)))
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLBindCol(statementHandle SQLHSTMT, columnNumber SQLUSMALLINT, targetType SQLSMALLINT, targetValuePtr []byte, bufferLength SQLLEN, vallen *SQLLEN) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall6(procSQLBindCol.Addr(), 6, uintptr(statementHandle), uintptr(columnNumber), uintptr(targetType), uintptr(unsafe.Pointer(&targetValuePtr[0])), uintptr(bufferLength), uintptr(unsafe.Pointer(vallen)))
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLDescribeCol(statementHandle SQLHSTMT, columnNumber SQLUSMALLINT, columnName *SQLWCHAR, bufferLength SQLSMALLINT, nameLengthPtr *SQLSMALLINT, dataTypePtr *SQLSMALLINT, columnSizePtr *SQLULEN, decimalDigitsPtr *SQLSMALLINT, nullablePtr *SQLSMALLINT) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall9(procSQLDescribeCol.Addr(), 9, uintptr(statementHandle), uintptr(columnNumber), uintptr(unsafe.Pointer(columnName)), uintptr(bufferLength), uintptr(unsafe.Pointer(nameLengthPtr)), uintptr(unsafe.Pointer(dataTypePtr)), uintptr(unsafe.Pointer(columnSizePtr)), uintptr(unsafe.Pointer(decimalDigitsPtr)), uintptr(unsafe.Pointer(nullablePtr)))
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLPrepare(statementHandle SQLHSTMT, statementText *SQLWCHAR, textLength SQLINTEGER) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall(procSQLPrepare.Addr(), 3, uintptr(statementHandle), uintptr(unsafe.Pointer(statementText)), uintptr(textLength))
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLCloseCursor(statementHandle SQLHSTMT) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall(procSQLCloseCursor.Addr(), 1, uintptr(statementHandle), 0, 0)
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLExecute(statementHandle SQLHSTMT) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall(procSQLExecute.Addr(), 1, uintptr(statementHandle), 0, 0)
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLNumResultCols(statementHandle SQLHSTMT, columnCountPtr *SQLSMALLINT) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall(procSQLNumResultCols.Addr(), 2, uintptr(statementHandle), uintptr(unsafe.Pointer(columnCountPtr)), 0)
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLBindParameter(statementHandle SQLHSTMT, parameterNumber SQLUSMALLINT, inputOutputType SQLSMALLINT, valueType SQLSMALLINT, parameterType SQLSMALLINT, columnSize SQLULEN, decimalDigits SQLSMALLINT, parameterValue SQLPOINTER, bufferLength SQLLEN, ind *SQLLEN) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall12(procSQLBindParameter.Addr(), 10, uintptr(statementHandle), uintptr(parameterNumber), uintptr(inputOutputType), uintptr(valueType), uintptr(parameterType), uintptr(columnSize), uintptr(decimalDigits), uintptr(parameterValue), uintptr(bufferLength), uintptr(unsafe.Pointer(ind)), 0, 0)
 	ret = SQLRETURN(r0)
 	return
 }
