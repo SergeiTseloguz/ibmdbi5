@@ -13,7 +13,7 @@ var (
 	
 	//mododbc32, err = syscall.LoadLibrary("square.dll")
    
-	procSQLAllocHandle     = mododbc32.NewProc("SQLAllocHandle")
+	
 	procSQLDriverConnect   = mododbc32.NewProc("SQLDriverConnect")
 	procSQLDisconnect      = mododbc32.NewProc("SQLDisconnect")
 	procSQLSetConnectAttr  = mododbc32.NewProc("SQLSetConnectAttr")
@@ -35,6 +35,7 @@ var (
 	procSQLMoreResults     = mododbc32.NewProc("SQLMoreResults")
     procSQLColAttribute    = mododbc32.NewProc("SQLColAttribute")
 	procSQLFetch           = mododbc32.NewProc("SQLFetch")
+	procSQLAllocHandle     = mododbc32.NewProc("SQLAllocHandle")
 )
 
 func GetDllName() string {
@@ -44,14 +45,6 @@ func GetDllName() string {
 		return "db2cli64.dll"
 	}
 }
-
-func SQLAllocHandle(handleType SQLSMALLINT, inputHandle SQLHANDLE, outputHandle *SQLHANDLE) (ret SQLRETURN) {
-	r0, _, _ := syscall.Syscall(procSQLAllocHandle.Addr(), 3, uintptr(handleType), uintptr(inputHandle), uintptr(unsafe.Pointer(outputHandle)))
-	ret = SQLRETURN(r0)
-	return
-}
-
-
 
 func SQLDisconnect(connectionHandle SQLHDBC) (ret SQLRETURN) {
 	r0, _, _ := syscall.Syscall(procSQLDisconnect.Addr(), 1, uintptr(connectionHandle), 0, 0)
@@ -175,6 +168,12 @@ func SQLFetch(statementHandle SQLHSTMT) (ret SQLRETURN) {
 
 func SQLRowCount(statementHandle SQLHSTMT, rowCountPtr *SQLLEN) (ret SQLRETURN) {
 	r0, _, _ := syscall.Syscall(procSQLRowCount.Addr(), 2, uintptr(statementHandle), uintptr(unsafe.Pointer(rowCountPtr)), 0)
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLAllocHandle(handleType SQLSMALLINT, inputHandle SQLHANDLE, outputHandle *SQLHANDLE) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall(procSQLAllocHandle.Addr(), 3, uintptr(handleType), uintptr(inputHandle), uintptr(unsafe.Pointer(outputHandle)))
 	ret = SQLRETURN(r0)
 	return
 }
