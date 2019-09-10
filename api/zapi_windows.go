@@ -33,8 +33,7 @@ var (
 	procSQLDescribeParam   = mododbc32.NewProc("SQLDescribeParam")
 	procSQLRowCount        = mododbc32.NewProc("SQLRowCount")
 	procSQLMoreResults     = mododbc32.NewProc("SQLMoreResults")
-)
-	
+
 )
 
 func GetDllName() string {
