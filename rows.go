@@ -11,7 +11,7 @@ import (
 	"reflect"
 	"unsafe"
 
-	"github.com/SergeiTseloguz/ibmdbi5"
+	"github.com/SergeiTseloguz/ibmdbi5/api"
 )
 
 type Rows struct {
