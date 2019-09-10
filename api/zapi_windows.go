@@ -35,7 +35,6 @@ var (
 	procSQLMoreResults     = mododbc32.NewProc("SQLMoreResults")
     procSQLColAttribute    = mododbc32.NewProc("SQLColAttribute")
 	procSQLFetch           = mododbc32.NewProc("SQLFetch")
-	procSQLRowCount        = mododbc32.NewProc("SQLRowCount")
 )
 
 func GetDllName() string {
