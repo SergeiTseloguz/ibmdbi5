@@ -33,7 +33,9 @@ var (
 	procSQLDescribeParam   = mododbc32.NewProc("SQLDescribeParam")
 	procSQLRowCount        = mododbc32.NewProc("SQLRowCount")
 	procSQLMoreResults     = mododbc32.NewProc("SQLMoreResults")
-
+    procSQLColAttribute    = mododbc32.NewProc("SQLColAttribute")
+	procSQLFetch           = mododbc32.NewProc("SQLFetch")
+	procSQLRowCount        = mododbc32.NewProc("SQLRowCount")
 )
 
 func GetDllName() string {
@@ -156,6 +158,24 @@ func SQLDescribeParam(statementHandle SQLHSTMT, parameterNumber SQLUSMALLINT, da
 
 func SQLMoreResults(statementHandle SQLHSTMT) (ret SQLRETURN) {
 	r0, _, _ := syscall.Syscall(procSQLMoreResults.Addr(), 1, uintptr(statementHandle), 0, 0)
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLColAttribute(statementHandle SQLHSTMT, ColumnNumber SQLUSMALLINT, FieldIdentifier SQLUSMALLINT, CharacterAttributePtr SQLPOINTER, BufferLength SQLSMALLINT, StringLengthPtr *SQLSMALLINT, NumericAttributePtr SQLPOINTER) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall9(procSQLColAttribute.Addr(), 7, uintptr(statementHandle), uintptr(ColumnNumber), uintptr(FieldIdentifier), uintptr(CharacterAttributePtr), uintptr(BufferLength), uintptr(unsafe.Pointer(StringLengthPtr)), uintptr(NumericAttributePtr), 0, 0)
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLFetch(statementHandle SQLHSTMT) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall(procSQLFetch.Addr(), 1, uintptr(statementHandle), 0, 0)
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLRowCount(statementHandle SQLHSTMT, rowCountPtr *SQLLEN) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall(procSQLRowCount.Addr(), 2, uintptr(statementHandle), uintptr(unsafe.Pointer(rowCountPtr)), 0)
 	ret = SQLRETURN(r0)
 	return
 }
