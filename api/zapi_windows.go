@@ -29,6 +29,11 @@ var (
 	procSQLCloseCursor     = mododbc32.NewProc("SQLCloseCursor")
 	procSQLExecute         = mododbc32.NewProc("SQLExecute")
 	procSQLNumResultCols   = mododbc32.NewProc("SQLNumResultCols")
+	procSQLNumParams       = mododbc32.NewProc("SQLNumParams")
+	procSQLDescribeParam   = mododbc32.NewProc("SQLDescribeParam")
+	procSQLRowCount        = mododbc32.NewProc("SQLRowCount")
+	procSQLMoreResults     = mododbc32.NewProc("SQLMoreResults")
+)
 	
 )
 
@@ -134,6 +139,24 @@ func SQLNumResultCols(statementHandle SQLHSTMT, columnCountPtr *SQLSMALLINT) (re
 
 func SQLBindParameter(statementHandle SQLHSTMT, parameterNumber SQLUSMALLINT, inputOutputType SQLSMALLINT, valueType SQLSMALLINT, parameterType SQLSMALLINT, columnSize SQLULEN, decimalDigits SQLSMALLINT, parameterValue SQLPOINTER, bufferLength SQLLEN, ind *SQLLEN) (ret SQLRETURN) {
 	r0, _, _ := syscall.Syscall12(procSQLBindParameter.Addr(), 10, uintptr(statementHandle), uintptr(parameterNumber), uintptr(inputOutputType), uintptr(valueType), uintptr(parameterType), uintptr(columnSize), uintptr(decimalDigits), uintptr(parameterValue), uintptr(bufferLength), uintptr(unsafe.Pointer(ind)), 0, 0)
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLNumParams(statementHandle SQLHSTMT, parameterCountPtr *SQLSMALLINT) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall(procSQLNumParams.Addr(), 2, uintptr(statementHandle), uintptr(unsafe.Pointer(parameterCountPtr)), 0)
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLDescribeParam(statementHandle SQLHSTMT, parameterNumber SQLUSMALLINT, dataTypePtr *SQLSMALLINT, parameterSizePtr *SQLULEN, decimalDigitsPtr *SQLSMALLINT, nullablePtr *SQLSMALLINT) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall6(procSQLDescribeParam.Addr(), 6, uintptr(statementHandle), uintptr(parameterNumber), uintptr(unsafe.Pointer(dataTypePtr)), uintptr(unsafe.Pointer(parameterSizePtr)), uintptr(unsafe.Pointer(decimalDigitsPtr)), uintptr(unsafe.Pointer(nullablePtr)))
+	ret = SQLRETURN(r0)
+	return
+}
+
+func SQLMoreResults(statementHandle SQLHSTMT) (ret SQLRETURN) {
+	r0, _, _ := syscall.Syscall(procSQLMoreResults.Addr(), 1, uintptr(statementHandle), 0, 0)
 	ret = SQLRETURN(r0)
 	return
 }
