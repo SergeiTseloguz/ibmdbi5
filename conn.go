@@ -16,8 +16,8 @@ type Conn struct {
 	tx *Tx
 }
 
-//func (d *Driver) Open(dsn string) (driver.Conn, error) {
-  func (c *Conn) Open(dsn string) (driver.Conn, error) {
+func (d *Driver) Open(dsn string) (driver.Conn, error) {
+ // func (c *Conn) Open(dsn string) (driver.Conn, error) {
 	var out api.SQLHANDLE
 	ret := api.SQLAllocHandle(api.SQL_HANDLE_DBC, api.SQLHANDLE(d.h), &out)
 	if IsError(ret) {
