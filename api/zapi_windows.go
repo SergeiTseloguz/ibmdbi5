@@ -38,12 +38,16 @@ var (
 	procSQLAllocHandle     = mododbc32.NewProc("SQLAllocHandle")
 )
 
+//func GetDllName() string {
+//	if winArch := os.Getenv("PROCESSOR_ARCHITECTURE"); winArch == "x86" {
+//		return "db2cli.dll"
+//	} else {
+//		return "db2cli64.dll"
+//	}
+//}
+
 func GetDllName() string {
-	if winArch := os.Getenv("PROCESSOR_ARCHITECTURE"); winArch == "x86" {
-		return "db2cli.dll"
-	} else {
-		return "db2cli64.dll"
-	}
+     return "cwbodbc.dll"
 }
 
 func SQLDisconnect(connectionHandle SQLHDBC) (ret SQLRETURN) {
